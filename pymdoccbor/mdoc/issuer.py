@@ -51,11 +51,11 @@ class MdocCborIssuer:
                     'issuerSigned': {
                         "nameSpaces": {
                             ns: [
-                                cbor2.CBORTag(24, value={k: v}) for k, v in dgst.items()
+                                cbor2.CBORTag(24, value=cbor2.dumps({k: v})) for k, v in dgst.items()
                             ]
                             for ns, dgst in msoi.disclosure_map.items()
                         },
-                        "issuerAuth": mso.encode()
+                        "issuerAuth": cbor2.loads(mso.encode()).value
                     },
                     # this is required during the presentation.
                     #  'deviceSigned': {
@@ -77,4 +77,4 @@ class MdocCborIssuer:
         """
             returns AF binary repr
         """
-        return binascii.hexlify(cbor2.dumps(self.signed))
+        return binascii.hexlify(self.dump())

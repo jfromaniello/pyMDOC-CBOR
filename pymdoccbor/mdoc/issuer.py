@@ -17,7 +17,7 @@ class MdocCborIssuer:
         self.status: int = 0
         if private_key and isinstance(private_key, dict):
             self.private_key = CoseKey.from_dict(private_key)
-        
+
         self.signed :dict = {}
 
     def new(
@@ -51,7 +51,7 @@ class MdocCborIssuer:
                     'issuerSigned': {
                         "nameSpaces": {
                             ns: [
-                                cbor2.CBORTag(24, value=cbor2.dumps({k: v})) for k, v in dgst.items()
+                                cbor2.CBORTag(24, value=cbor2.dumps(v)) for k, v in dgst.items()
                             ]
                             for ns, dgst in msoi.disclosure_map.items()
                         },
@@ -66,7 +66,7 @@ class MdocCborIssuer:
             'status': self.status
         }
         return self.signed
-    
+
     def dump(self):
         """
             returns bytes
